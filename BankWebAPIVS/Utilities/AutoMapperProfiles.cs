@@ -9,6 +9,7 @@ namespace BankWebAPIVS.Utilities
         public AutoMapperProfiles()
         {
             CreateMap<TransactionCreationDTO, Transaction>();
+            CreateMap<Transaction, TransactionDTO>();
         }
     }
 }
