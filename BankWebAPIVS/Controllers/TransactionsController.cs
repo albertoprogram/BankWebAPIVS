@@ -28,11 +28,9 @@ namespace BankWebAPIVS.Controllers
 
             await applicationDBContext.SaveChangesAsync();
 
-            //var transactionDTO = mapper.Map<TransactionDTO>(transaction);
+            var transactionDTO = mapper.Map<TransactionDTO>(transaction);
 
-            //return CreatedAtRoute("getTransaction",new {id = transaction.Id}, )
-
-            return Ok();
+            return CreatedAtRoute("getTransaction", new { id = transaction.Id }, transactionDTO);
         }
 
         [HttpGet("{id:int}", Name = "getTransaction")]
