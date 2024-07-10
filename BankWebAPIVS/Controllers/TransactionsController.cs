@@ -46,5 +46,13 @@ namespace BankWebAPIVS.Controllers
 
             return mapper.Map<TransactionDTO>(transaction);
         }
+
+        [HttpGet(Name = "getTransactionsByPeriod")]
+        public async Task<ActionResult<List<TransactionDTO>>> GetTransactionsByPeriod()
+        {
+            var transactions = await applicationDBContext.Transactions.ToListAsync();
+
+            return mapper.Map<List<TransactionDTO>>(transactions);
+        }
     }
 }
