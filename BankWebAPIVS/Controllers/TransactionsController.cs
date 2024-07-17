@@ -47,10 +47,14 @@ namespace BankWebAPIVS.Controllers
             return mapper.Map<TransactionDTO>(transaction);
         }
 
-        [HttpGet(Name = "getTransactionsByPeriod")]
-        public async Task<ActionResult<List<TransactionDTO>>> GetTransactionsByPeriod()
+        [HttpGet("TransactionsByPeriod", Name = "getTransactionsByPeriod")]
+        public async Task<ActionResult<List<TransactionDTO>>> GetTransactionsByPeriod(
+            DateTime startDate, DateTime endDate)
         {
-            var transactions = await applicationDBContext.Transactions.ToListAsync();
+            var transactions = await applicationDBContext.Transactions
+                .Where(t => t.DateAndTime >= startDate && t.DateAndTime <= endDate)
+                .OrderByDescending(t => t.DateAndTime)
+                .ToListAsync();
 
             return mapper.Map<List<TransactionDTO>>(transactions);
         }
