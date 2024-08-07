@@ -18,5 +18,7 @@ namespace BankWebAPIVS.Entities
         public decimal Amount { get; set; }
 
         public DateTime DateAndTime { get; set; }
+
+        public Customer Customer { get; set; }
     }
 }
