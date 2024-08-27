@@ -2,6 +2,7 @@
 using BankWebAPIVS.DTOs;
 using BankWebAPIVS.Entities;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace BankWebAPIVS.Controllers
 {
@@ -29,8 +30,30 @@ namespace BankWebAPIVS.Controllers
 
             var customerDTO = mapper.Map<CustomerDTO>(customer);
 
-            return Ok();
-            //return CreatedAtRoute("getCustomer", new { id = transaction.Id }, transactionDTO);
+            return CreatedAtRoute("getCustomer", new { customerId = customer.CustomerId }, customerDTO);
         }
+
+        [HttpGet("{customerId}", Name = "getCustomer")]
+        public async Task<ActionResult<CustomerDTO>> GetCustomer(string customerId)
+        {
+            var customer = await applicationDBContext.Customers
+                .FirstOrDefaultAsync(customerBD => customerBD.CustomerId == customerId);
+
+            if (customer == null)
+            {
+                return NotFound();
+            }
+
+            return mapper.Map<CustomerDTO>(customer);
+        }
+
+        [HttpGet(Name = "getCustomers")]
+        public async Task<ActionResult<List<CustomerDTO>>> GetCustomers()
+        {
+            var customers = await applicationDBContext.Customers.ToListAsync();
+
+            return mapper.Map<List<CustomerDTO>>(customers);
+        }
+
     }
 }
