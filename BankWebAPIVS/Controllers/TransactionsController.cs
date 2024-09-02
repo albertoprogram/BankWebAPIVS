@@ -51,8 +51,10 @@ namespace BankWebAPIVS.Controllers
         public async Task<ActionResult<List<TransactionDTO>>> GetTransactionsByPeriod(
             DateTime startDate, DateTime endDate)
         {
+            DateTime UpdatedEndDate = endDate.AddTicks(TimeSpan.TicksPerDay - 1);
+
             var transactions = await applicationDBContext.Transactions
-                .Where(t => t.DateAndTime >= startDate && t.DateAndTime <= endDate)
+                .Where(t => t.DateAndTime >= startDate && t.DateAndTime <= UpdatedEndDate)
                 .OrderByDescending(t => t.DateAndTime)
                 .ToListAsync();
 
