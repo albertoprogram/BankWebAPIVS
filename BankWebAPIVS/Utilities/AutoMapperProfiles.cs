@@ -13,6 +13,7 @@ namespace BankWebAPIVS.Utilities
 
             CreateMap<CustomerCreationDTO, Customer>();
             CreateMap<Customer, CustomerDTO>();
+            CreateMap<CustomerUpdateDTO, Customer>();
         }
     }
 }

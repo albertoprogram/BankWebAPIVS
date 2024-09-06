@@ -55,5 +55,25 @@ namespace BankWebAPIVS.Controllers
             return mapper.Map<List<CustomerDTO>>(customers);
         }
 
+        [HttpPut("{customerId}")]
+        public async Task<ActionResult> Put(CustomerUpdateDTO customerUpdateDTO, string customerId)
+        {
+            var customerExists = await applicationDBContext.Customers.AnyAsync(customer => customer.CustomerId == customerId);
+
+            if (!customerExists)
+            {
+                return NotFound();
+            }
+
+            var customer = mapper.Map<Customer>(customerUpdateDTO);
+
+            customer.CustomerId = customerId;
+
+            applicationDBContext.Update(customer);
+
+            await applicationDBContext.SaveChangesAsync();
+
+            return NoContent();
+        }
     }
 }
