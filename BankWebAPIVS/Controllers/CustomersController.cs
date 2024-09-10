@@ -75,5 +75,22 @@ namespace BankWebAPIVS.Controllers
 
             return NoContent();
         }
+
+        [HttpDelete("{customerId}")]
+        public async Task<ActionResult> Delete(string customerId)
+        {
+            var customerExists = await applicationDBContext.Customers.AnyAsync(customer => customer.CustomerId == customerId);
+
+            if (!customerExists)
+            {
+                return NotFound();
+            }
+
+            applicationDBContext.Remove(new Customer { CustomerId = customerId });
+
+            await applicationDBContext.SaveChangesAsync();
+
+            return NoContent();
+        }
     }
 }
