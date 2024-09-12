@@ -1,8 +1,10 @@
 ﻿using AutoMapper;
 using BankWebAPIVS.DTOs;
 using BankWebAPIVS.Entities;
+using BankWebAPIVS.Migrations;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Transaction = BankWebAPIVS.Entities.Transaction;
 
 namespace BankWebAPIVS.Controllers
 {
@@ -22,6 +24,14 @@ namespace BankWebAPIVS.Controllers
         [HttpPost]
         public async Task<ActionResult> Post([FromBody] TransactionCreationDTO transactionCreationDTO)
         {
+            var customerExists = await applicationDBContext.Customers.AnyAsync(
+                customer => customer.CustomerId == transactionCreationDTO.CustomerId);
+
+            if (!customerExists)
+            {
+                return BadRequest("The customer for this transaction does not exist.");
+            }
+
             var transaction = mapper.Map<Transaction>(transactionCreationDTO);
 
             applicationDBContext.Add(transaction);
